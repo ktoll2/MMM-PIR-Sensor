@@ -191,7 +191,7 @@ modules: [
 		module: 'MMM-PIR-Sensor', 
 		position: "top_center", // Remove this line to avoid having an visible indicator
 		config: {
-			sensorPin: [23],
+			sensorPins: [23],
 			powerSavingDelay: 60, // Turn HDMI OFF after 60 seconds of no motion, until motion is detected again
 			preventHDMITimeout: 4, // Turn HDMI ON and OFF again every 4 minutes when power saving, to avoid LCD/TV timeout
 			supportCEC: true, 

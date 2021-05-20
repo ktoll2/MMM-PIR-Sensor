@@ -4,7 +4,7 @@
   "description": "PIR motion sensor module for the Magic Mirror.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/paviro/MMM-PIR-Sensor"
+    "url": "git+https://github.com/ktoll2/MMM-PIR-Sensor"
   },
   "keywords": [
     "magic mirror",
@@ -14,12 +14,12 @@
     "motion"
   ],
   "author": "Paul-Vincent Roll",
-  "contributors": "https://github.com/paviro/MMM-PIR-Sensor/graphs/contributors",
+  "contributors": "https://github.com/ktoll2/MMM-PIR-Sensor/graphs/contributors",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/paviro/MMM-PIR-Sensor/issues"
+    "url": "https://github.com/ktoll2/MMM-PIR-Sensor/issues"
   },
-  "homepage": "https://github.com/paviro/MMM-PIR-Sensor#readme",
+  "homepage": "https://github.com/ktoll2/MMM-PIR-Sensor#readme",
   "scripts": {
     "postinstall": "node_modules/.bin/electron-rebuild -e ../../node_modules/electron"
   },

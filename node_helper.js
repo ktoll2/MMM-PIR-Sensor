@@ -3,7 +3,9 @@
 /* Magic Mirror
 * Module: MMM-PIR-Sensor
 *
-* By Paul-Vincent Roll http://paulvincentroll.com
+* By Kirk Tolleshaug
+* 
+* Forked From Paul-Vincent Roll http://paulvincentroll.com
 * MIT Licensed.
 */
 
@@ -146,39 +148,44 @@ module.exports = NodeHelper.create({
                     }
                 })
             }
-	    else {
-                exec("/usr/bin/vcgencmd display_power 1", null);  // Mirror could have stopped with HDMI off. Reset at startup
-	        if (this.config.supportCEC)
-    	            exec("echo 'on o' | cec-client -s -d 1");
-	    }
+            else {
+                    exec("/usr/bin/vcgencmd display_power 1", null);  // Mirror could have stopped with HDMI off. Reset at startup
+                if (this.config.supportCEC)
+                        exec("echo 'on o' | cec-client -s -d 1");
+            }
 
-            // Setup for sensor pin
-            this.pir = new Gpio(this.config.sensorPin, 'in', 'both');
+            // Setup for sensor pins
+            this.pirList = [];
+            this.config.sensorPins.forEach((p) => {
+                this.pirList.push(new Gpio(p, 'in', 'both'));
+            });
 
             // Setup value which represent on and off
             const valueOn = this.config.sensorState;
             const valueOff = (this.config.sensorState + 1) % 2;
 
             // Detected movement
-            this.pir.watch(function (err, value) {
-                if (value == valueOn) {
-                    self.sendSocketNotification('USER_PRESENCE', true);
-                    if (self.config.powerSaving){
-                        clearTimeout(self.deactivateMonitorTimeout);
-                        self.activateMonitor();
+            this.pirList.forEach((pir) => {
+                pir.watch(function (err, value) {
+                    if (value == valueOn) {
+                        self.sendSocketNotification('USER_PRESENCE', true);
+                        if (self.config.powerSaving){
+                            clearTimeout(self.deactivateMonitorTimeout);
+                            self.activateMonitor();
+                        }
                     }
-                }
-                else if (value == valueOff) {
-                    self.sendSocketNotification('USER_PRESENCE', false);
-                    if (!self.config.powerSaving){
-                        return;
+                    else if (value == valueOff) {
+                        self.sendSocketNotification('USER_PRESENCE', false);
+                        if (!self.config.powerSaving){
+                            return;
+                        }
+    
+                        self.deactivateMonitorTimeout = setTimeout(function() {
+                            self.deactivateMonitor();
+                        }, self.config.powerSavingDelay * 1000);
                     }
-
-                    self.deactivateMonitorTimeout = setTimeout(function() {
-                        self.deactivateMonitor();
-                    }, self.config.powerSavingDelay * 1000);
-                }
-            });
+                })
+            })
 
             this.started = true;
 

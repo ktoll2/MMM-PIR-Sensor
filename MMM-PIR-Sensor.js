@@ -3,14 +3,16 @@
 /* Magic Mirror
 * Module: MMM-PIR-Sensor
 *
-* By Paul-Vincent Roll http://paulvincentroll.com
+* By Kirk Tolleshaug
+* 
+* Forked From Paul-Vincent Roll http://paulvincentroll.com
 * MIT Licensed.
 */
 
 Module.register('MMM-PIR-Sensor',{
 	requiresVersion: '2.1.0',
 	defaults: {
-		sensorPin: 22,
+		sensorPins: [22],
 		sensorState: 1,
 		relayPin: false,
 		relayState: 1,
